@@ -1,0 +1,10 @@
+FROM node:17
+WORKDIR /
+COPY . .
+RUN npm i -g npm@8.5.0
+RUN npm install
+ENV REACT_APP_API_HOST = http://192.168.1.12
+ENV REACT_APP_API_PORT = 5000
+EXPOSE 3000
+CMD ["npm","start"]
+
