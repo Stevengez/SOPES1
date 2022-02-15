@@ -22,6 +22,7 @@ export default class App extends Component {
       method: 'GET',
       headers: { 'Content-Type': 'application/json'}
     };
+    console.log(`Sending request to: ${API_SERVER}:${API_PORT}/getRecords/`);
     const response = await fetch(`${API_SERVER}:${API_PORT}/getRecords/`,requestOpions);
     const body = await response.json();
 
