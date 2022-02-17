@@ -57,8 +57,10 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=userp1password
     ports:
       - "27017:27017"
+    volumes:
+      - mongoVolume:/data/db:rw
   backend:
-    image: stevengez/sop1_backend
+    image: stevengez/backend_p1_201602938:latest
     container_name: mybackend
     environment:
       - MONGO_USER=userp1
@@ -68,13 +70,15 @@ services:
     ports:
       - "5000:5000"
   frontend:
-    image: stevengez/sop1_frontend
+    image: stevengez/frontend_p1_201602938:latest
     container_name: myfront
     environment:
       - REACT_APP_API_HOST=http://192.168.1.12
       - REACT_APP_API_PORT=5000 
     ports:
       - "3000:3000"
+volumes:
+  mongoVolume:
 
       
       
