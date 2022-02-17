@@ -1,3 +1,11 @@
-FROM nginx:1.21.6-alpine
-COPY ngix.conf /etc/nginx/nginx.conf
-COPY ./build/ /usr/share/nginx/html
+FROM node:16-alpine
+WORKDIR /
+COPY . .
+RUN npm install
+ENV MONGO_USER root
+ENV MONGO_PASS Keyuser95
+ENV MONGO_HOST 192.168.1.12
+ENV MONGO_POST 27017
+EXPOSE 5000
+CMD ["node","index.js"]
+
