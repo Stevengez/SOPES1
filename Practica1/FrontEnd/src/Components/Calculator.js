@@ -168,7 +168,7 @@ export default class Calculator extends Component {
         const response = await fetch(`${API_SERVER}:${API_PORT}/addOperation/`, requestOptions);
         const json = await response.json();
 
-        if(json.inserted === 1 && this.props.addLocalData !== undefined){
+        if(json.InsertedID !== "" && this.props.addLocalData !== undefined){
             this.props.addLocalData({
                 left: parseFloat(left),
                 right: parseFloat(right),
