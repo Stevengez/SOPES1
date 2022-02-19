@@ -59,16 +59,16 @@ services:
       - "27017:27017"
     volumes:
       - mongoVolume:/data/db:rw
-  # backend:
-  #   image: stevengez/backend_p1_201602938:latest
-  #   container_name: mybackend
-  #   environment:
-  #     - MONGO_USER=userp1
-  #     - MONGO_PASS=userp1password
-  #     - MONGO_HOST=192.168.1.12
-  #     - MONGO_PORT=27017
-  #   ports:
-  #     - "5000:5000"
+  backend:
+    image: stevengez/backend_p1_201602938:latest
+    container_name: mybackend
+    environment:
+      - MONGO_USER=userp1
+      - MONGO_PASS=userp1password
+      - MONGO_HOST=192.168.1.12
+      - MONGO_PORT=27017
+    ports:
+      - "5000:5000"
   frontend:
     image: stevengez/frontend_p1_201602938:latest
     container_name: myfront

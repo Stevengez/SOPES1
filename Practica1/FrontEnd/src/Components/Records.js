@@ -55,7 +55,7 @@ export default class Records extends Component {
         this.getRecordsFromAPI().then((result) => {
             let opList = [];
             result.forEach((item) => {
-                opList.push({
+                opList.unshift({
                     left: item.left,
                     right: item.right,
                     operator: item.operator,

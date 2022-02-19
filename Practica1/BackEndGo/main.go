@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
+	"time"
 
 	"github.com/gofiber/cors"
 	"github.com/gofiber/fiber"
@@ -20,27 +20,24 @@ var MONGO_USER = getEnv("MONGO_USER", "userp1")
 var MONGO_PASS = getEnv("MONGO_PASS", "userp1password")
 var MONGO_HOST = getEnv("MONGO_HOST", "192.168.1.12")
 var MONGO_PORT = getEnv("MONGO_PORT", "27017")
-var FRONT_PORT = getEnv("FRONT_PORT", "3000")
-var API_PORT int = getPort("API_PORT", 5000)
 
 const MONGO_DB = "SO_Practica1"
 const MONGO_COLLETION_NAME = "operations"
 
 type Operation struct {
-	Left     float64 `json:left,omitempty`
-	Right    float64 `json:right,omitempty`
-	Operator string  `json:operator,omitempty`
+	Left      float64   `json:left,omitempty`
+	Right     float64   `json:right,omitempty`
+	Operator  string    `json:operator,omitempty`
+	Timestamp time.Time `json:timestamp,omitempty`
 }
 
 func main() {
-	fmt.Println("Hola Mundo")
-	fmt.Println("USUARIO ES: ", MONGO_USER)
-
+	fmt.Println("GoBackEnd Running in port: ", 5000)
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Get("/getRecords/", getRecords)
 	app.Post("/addOperation/", addOperation)
-	app.Listen(API_PORT)
+	app.Listen(5000)
 }
 
 func getEnv(key, fallback string) string {
@@ -51,21 +48,11 @@ func getEnv(key, fallback string) string {
 	return value
 }
 
-func getPort(key string, defPort int) int {
-	value := os.Getenv(key)
-	if len(value) == 0 {
-		return defPort
-	}
-
-	valPort, _ := strconv.Atoi(value)
-	return valPort
-}
-
 func getRecords(c *fiber.Ctx) {
 	collection, err := getCollection(MONGO_DB, MONGO_COLLETION_NAME)
 
 	if err != nil {
-		fmt.Println("Error en DB connection")
+		fmt.Println("Error connecting DB")
 		c.Status(300).Send(err)
 		return
 	}
@@ -75,7 +62,7 @@ func getRecords(c *fiber.Ctx) {
 	defer cur.Close(context.Background())
 
 	if err != nil {
-		fmt.Println("Error en DB find")
+		fmt.Println("No records found")
 		c.Status(300).Send(err)
 		return
 	}
@@ -84,13 +71,11 @@ func getRecords(c *fiber.Ctx) {
 
 	if results == nil {
 		fmt.Println("No records")
-		c.Status(300).Send(404)
+		c.Status(300).Send("Error filling results")
 		return
 	}
 
-	json, _ := json.Marshal(results)
-
-	fmt.Println("Json packet sending: ", json)
+	json, _ := json.MarshalIndent(results, "", "	")
 	c.Send(json)
 }
 
@@ -104,10 +89,10 @@ func addOperation(c *fiber.Ctx) {
 
 	var operation Operation
 	json.Unmarshal([]byte(c.Body()), &operation)
+	operation.Timestamp = time.Now()
 
-	fmt.Println("Operation val: ", operation.Left)
-	fmt.Println("Operation val: ", operation.Right)
-	fmt.Println("Operation val: ", operation.Operator)
+	fmt.Println("## Inserting New Operation")
+	fmt.Println("# ", operation.Left, operation.Operator, operation.Right)
 
 	res, err := collection.InsertOne(context.Background(), operation)
 	if err != nil {
