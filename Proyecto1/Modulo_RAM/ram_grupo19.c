@@ -26,34 +26,20 @@ MODULE_AUTHOR("Steven Jocol");
 MODULE_DESCRIPTION("Modulo que muestra la memoria libre en MB");
 MODULE_VERSION("1.0");
 
+static void show_val_kb(struct seq_file *m, const char *s, unsigned long num)
+ {
+ 	seq_put_decimal_ull_width(m, s, num << (PAGE_SHIFT - 10), 8);
+ 	seq_write(m, " kB\n", 4);
+ }
 
 static int escribir_proc(struct seq_file *m, void *v){
-
     struct sysinfo i;
-	unsigned long committed;
-	long cached;
-	long available;
-	unsigned long pages[NR_LRU_LISTS];
-	unsigned long sreclaimable, sunreclaim;
-	int lru;
-
 	si_meminfo(&i);
-	si_swapinfo(&i);
-	committed = vm_memory_committed();
+    show_val_kb(m, "Total", i.totalram);
+    seq_printf(m,"{\n\t\"total\" : %lu,\n\t\"libre\" : %lu,\n\t\"available\" : 000\n}", i.totalram, i.freeram);
 
-	cached = global_node_page_state(NR_FILE_PAGES) -
-			total_swapcache_pages() - i.bufferram;
-	if (cached < 0)
-		cached = 0;
-
-	for (lru = LRU_BASE; lru < NR_LRU_LISTS; lru++)
-		pages[lru] = global_node_page_state(NR_LRU_BASE + lru);
-
-	available = si_mem_available();
-	sreclaimable = global_node_page_state_pages(NR_SLAB_RECLAIMABLE_B);
-	sunreclaim = global_node_page_state_pages(NR_SLAB_UNRECLAIMABLE_B);
-
-    seq_printf(m,"{\n\t\"total\":%lu,\n\tlibre: %lu}", i.totalram, i.freeram);
+    
+    
     return 0;
 }
 

@@ -31,9 +31,7 @@ __used __section("__versions") = {
 	{ 0x69583438, "proc_create_single_data" },
 	{ 0xc959d152, "__stack_chk_fail" },
 	{ 0xa681aaa8, "seq_printf" },
-	{ 0x785a93b4, "si_mem_available" },
-	{ 0xf8c482ed, "vm_node_stat" },
-	{ 0x26520970, "vm_memory_committed" },
+	{ 0x5739da03, "seq_write" },
 	{ 0x40c7247c, "si_meminfo" },
 	{ 0xbdfb6dbb, "__fentry__" },
 };
@@ -41,4 +39,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "0760DBCA6065CFED5FC537F");
+MODULE_INFO(srcversion, "1BFE77637947632EDE8D47E");
