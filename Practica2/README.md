@@ -6,6 +6,13 @@ Por motivos de simplicidad de la practica esta contiene parcialmente solo una ru
 
 Ya que el proyecto se creo usando contenedores la implementacion de la misma fue basicamente de estructurarla dentro del ambiente de Kubernetes, aun asi para mas detalle de la construccion y funcionamiento de los contenedores aqui usados por favor revisar la documentacion del proyecto fase 2 [aqui](https://github.com/MarcosC19/SO1-Proyecto-G19/tree/main/Fase2)
 
+## Creacion del cluster
+Para la implementacion de esta practica se implementa un cluster con 2 nodos
+
+```bash
+gcloud container --project "practica2-347918" clusters create practica2-201602938 --zone "us-central1-a" --num-nodes=2 --tags=allin,allout --machine-type=n1-standard-2 --no-enable-network-policy --disk-type=pd-standard
+```
+
 # Ruta
 
 Esta ruta consiste en:
