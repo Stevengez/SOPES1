@@ -1,16 +1,47 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: two-containers
+  name: podtest
 spec:
   restartPolicy: Never
 
   containers:
-    - name: uno
+    - name: grpc-client
       image: stevengez/goclient_grpc
+      ports:
+      - containerPort: 5000
+      env:
+      - name: gRPC_SERVER_IP
+        value: "localhost"
+    
+      - name: gRPC_SERVER_PORT
+        value: "50051"
+      
+      - name: API_GO_PORT
+        value: "5000"
 
-    - name: dos
+    - name: grpc-server
       image: stevengez/nodeserver_grpc
+      ports:
+      - containerPort: 50051
+      env:
+      - name: gRPC_SERVER_PORT
+        value: "50051"
+
+      - name: RABBIT_SERVER
+        value: "rabbit"
+
+      - name: RABBIT_USER
+        valueFrom:
+          secretKeyRef: 
+            name: rabbit-default-user
+            key: username
+
+      - name: RABBIT_PASSWORD
+        valueFrom:
+          secretKeyRef: 
+            name: rabbit-default-user
+            key: password
 
     
 

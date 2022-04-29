@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-api
+  labels:
+    app: grpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc
+  template:
+    metadata:
+      labels:
+        app: grpc
+    spec:
+      containers:
+      - name: grpc-client
+        image: stevengez/goclient_grpc
+        ports:
+        - containerPort: 5000
+        env:
+        - name: gRPC_SERVER_IP
+          value: "localhost"
+      
+        - name: gRPC_SERVER_PORT
+          value: "50051"
+        
+        - name: API_GO_PORT
+          value: "5000"
+
+      - name: grpc-server
+        image: stevengez/nodeserver_grpc
+        ports:
+        - containerPort: 50051
+        env:
+        - name: gRPC_SERVER_PORT
+          value: "50051"
+
+        - name: RABBIT_SERVER
+          value: "rabbit"
+
+        - name: RABBIT_USER
+          valueFrom:
+            secretKeyRef: 
+              name: rabbit-default-user
+              key: username
+
+        - name: RABBIT_PASSWORD
+          valueFrom:
+            secretKeyRef: 
+              name: rabbit-default-user
+              key: password

@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: subscriber
+spec:
+  restartPolicy: Never
+
+  containers:
+    - name: subscriber
+      image: stevengez/gorabbit_subscriber
+      env:
+      - name: RABIT_HOST 
+        value: "rabbit"
+      
+      - name: RABBIT_QUEUE 
+        value: "GameQueue"
+      
+      - name: RABBIT_USER 
+        valueFrom:
+          secretKeyRef: 
+            name: rabbit-default-user
+            key: username
+        
+      - name: RABBIT_PASSWORD 
+        valueFrom:
+          secretKeyRef: 
+            name: rabbit-default-user
+            key: password
+
+      - name: MONGO_HOST 
+        value: "10.128.0.13"
+
+      - name: MONGO_USER 
+        value: "admingrupo19"
+
+      - name: MONGO_PASS 
+        value: "so1-fase2"
+
+      - name: MONGO_DB
+        value: "so-proyecto-f2"
+      
+      - name: MONGO_COLLECTION
+        value: "logs"
+
+
