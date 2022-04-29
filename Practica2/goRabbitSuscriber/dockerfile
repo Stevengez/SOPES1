@@ -1,0 +1,25 @@
+FROM golang:1.16-alpine
+WORKDIR /
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+COPY *.go . 
+ENV RABIT_HOST host.docker.internal
+ENV RABBIT_PORT 5672
+ENV RABBIT_QUEUE GameQueue
+ENV RABBIT_USER rabbit
+ENV RABBIT_PASSWORD sopes1
+ENV REDIS_HOST 34.136.70.238
+ENV REDIS_PORT 6379
+ENV MONGO_HOST 35.222.117.133
+ENV MONGO_PORT 27017
+ENV MONGO_USER admingrupo19
+ENV MONGO_PASS so1-fase2
+ENV MONGO_DB so-proyecto-f2
+ENV MONGO_COLLECTION logs
+ENV TiDB_HOST 34.68.145.193
+ENV TiDB_USER grupo19
+ENV TiDB_PORT grupo19-f2
+ENV TiDB_DB sopes1f2
+RUN go build -o goRabbitSubscriber
+CMD ["/goRabbitSubscriber"]

@@ -1,0 +1,10 @@
+services:
+  goclient:
+      image: stevengez/goclient_grpc
+      container_name: goClient_gRPC
+      environment:
+        - gRPC_SERVER_IP=10.128.0.24
+        - gRPC_SERVER_PORT=50051
+        - API_GO_PORT=5000
+      ports:
+        - "80:5000"

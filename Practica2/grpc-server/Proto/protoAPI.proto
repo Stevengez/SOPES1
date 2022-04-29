@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option go_package = "proyecto.com/fase2/protoAPI";
+option java_multiple_files = true;
+option java_package = "proyecto.com/fase2/protoAPI";
+option java_outer_classname = "protoAPI";
+option objc_class_prefix = "spf2";
+
+package protoAPI;
+
+service localAPI {
+    rpc startGame (GameRequest) returns (GameResult) {}
+}
+
+message GameRequest {
+    int32 game_id = 1;
+    int32 players = 2;
+}
+
+message GameResult {
+    int32 status = 1;
+}
